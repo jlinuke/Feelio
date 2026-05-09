@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}PHM Locator — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="section-heading mb-4">Public Health Midwife Locator</h1>
+  <p class="mb-4" style="color:#9C6B8A;">Find a Public Health Midwife (PHM) in your district. They can provide direct in-home support and screening referrals.</p>
+
+  <form method="get" class="d-flex gap-2 mb-4" style="max-width:400px;">
+    <select name="province" class="form-select">
+      <option value="">All Provinces</option>
+      {% for p in provinces %}<option value="{{ p }}" {% if p == selected_province %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="btn-feelio-primary btn px-4">Filter</button>
+  </form>
+
+  <div class="row g-3">
+    {% for contact in contacts %}
+    <div class="col-md-6 col-lg-4">
+      <div class="feelio-card p-4 h-100">
+        <h5 class="mb-1">{{ contact.district }}</h5>
+        <p class="mb-2" style="font-size:0.82rem;color:#9C6B8A;"><i class="fa-solid fa-location-dot me-1"></i>{{ contact.province }}</p>
+        {% if contact.moh_office %}<p class="mb-1" style="font-size:0.88rem;"><i class="fa-solid fa-hospital me-2" style="color:var(--primary);"></i>{{ contact.moh_office }}</p>{% endif %}
+        {% if contact.name %}<p class="mb-1" style="font-size:0.88rem;"><i class="fa-solid fa-user-nurse me-2" style="color:var(--primary);"></i>{{ contact.name }}</p>{% endif %}
+        {% if contact.phone %}
+        <a href="tel:{{ contact.phone }}" class="btn-feelio-primary btn btn-feelio-sm mt-2">
+          <i class="fa-solid fa-phone me-1"></i>{{ contact.phone }}
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <p style="color:#9C6B8A;">No PHM contacts found for this province.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

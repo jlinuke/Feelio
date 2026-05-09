@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Community — Feelio{% endblock %}
+{% block content %}
+<div class="container py-3 py-md-4">
+
+  <!-- Header -->
+  <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
+    <div>
+      <h1 class="section-heading mb-1">Community</h1>
+      <p class="mb-0" style="color:#9C6B8A;font-size:0.85rem;">A safe space where mothers support mothers 💗</p>
+    </div>
+    <a href="{% url 'community:new_thread' %}" class="btn-feelio-primary btn btn-feelio-sm flex-shrink-0">
+      <i class="fa-solid fa-plus me-1"></i>New Post
+    </a>
+  </div>
+
+  <!-- Safe space reminder -->
+  <div class="p-3 mb-3 rounded-feelio" style="background:var(--bg1);border:1.5px solid var(--bg2);font-size:0.85rem;">
+    <i class="fa-solid fa-shield-heart me-2" style="color:var(--primary);"></i>
+    <strong>Safe space rules:</strong> Be kind. No judgment. Anonymous by default.
+    In crisis? <a href="tel:1926" style="color:var(--primary);font-weight:700;">Call 1926</a>.
+  </div>
+
+  <!-- Categories — horizontal scroll on mobile -->
+  <div class="mb-3">
+    <h5 class="fw-700 mb-2" style="font-size:0.9rem;">📂 Topics</h5>
+    <div class="d-flex gap-2 overflow-auto pb-1" style="-webkit-overflow-scrolling:touch;scrollbar-width:none;">
+      {% for cat in categories %}
+      <a href="{% url 'community:category' slug=cat.slug %}"
+         class="flex-shrink-0 text-decoration-none px-3 py-2 rounded-pill fw-700"
+         style="background:var(--white);border:1.5px solid var(--bg2);color:var(--text-body);font-size:0.82rem;white-space:nowrap;">
+        <i class="fa-solid {{ cat.icon }} me-1" style="color:var(--primary);"></i>{{ cat.name }}
+        <span class="ms-1" style="opacity:0.6;font-size:0.72rem;">({{ cat.threads.count }})</span>
+      </a>
+      {% endfor %}
+      <a href="{% url 'community:msgs' %}"
+         class="flex-shrink-0 text-decoration-none px-3 py-2 rounded-pill fw-700"
+         style="background:var(--white);border:1.5px solid var(--bg2);color:var(--text-body);font-size:0.82rem;white-space:nowrap;">
+        <i class="fa-solid fa-map-pin me-1" style="color:var(--primary);"></i>Support Groups
+      </a>
+    </div>
+  </div>
+
+  <!-- Recent threads -->
+  <h5 class="fw-700 mb-2" style="font-size:0.9rem;">Recent Conversations</h5>
+  {% for thread in recent_threads %}
+  <a href="{% url 'community:thread' pk=thread.pk %}" class="thread-card">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <div class="min-w-0">
+        {% if thread.is_pinned %}<i class="fa-solid fa-thumbtack me-1" style="color:var(--primary);font-size:0.75rem;"></i>{% endif %}
+        <span class="thread-title">{{ thread.title }}</span>
+        <div class="thread-meta mt-1">
+          <i class="fa-solid fa-user-circle me-1"></i>{{ thread.author_display }}
+          &nbsp;·&nbsp; <span class="d-none d-sm-inline">{{ thread.category.name }} ·</span>
+          {{ thread.updated_at|timesince }} ago
+        </div>
+      </div>
+      <div style="flex-shrink:0;color:#9C6B8A;font-size:0.78rem;padding-top:2px;">
+        <i class="fa-solid fa-comments"></i> {{ thread.reply_count }}
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <div class="text-center py-4">
+    <p class="mb-3" style="color:#9C6B8A;">Be the first to start a conversation!</p>
+    <a href="{% url 'community:new_thread' %}" class="btn-feelio-primary btn">Start a Post</a>
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock %}

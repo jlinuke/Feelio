@@ -1,0 +1,5 @@
+[
+  {"model":"resources.helpline","pk":1,"fields":{"name":"NIMH National Mental Health Helpline","number":"1926","description":"National Institute of Mental Health Sri Lanka. Free, confidential, 24/7 crisis support.","available_hours":"24/7","languages":"Sinhala, Tamil, English","is_featured":true,"order":1}},
+  {"model":"resources.helpline","pk":2,"fields":{"name":"Sumithrayo","number":"0112-696-666","description":"Emotional support for those in distress or feeling suicidal.","available_hours":"24/7","languages":"Sinhala, English","is_featured":true,"order":2}},
+  {"model":"resources.helpline","pk":3,"fields":{"name":"CCCline (Child & Youth)","number":"1929","description":"Counselling for children, youth, and families.","available_hours":"24/7","languages":"Sinhala, Tamil, English","is_featured":false,"order":3}}
+]

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}Mood History — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h1 class="section-heading">My Mood History</h1>
+    <a href="{% url 'tracker:checkin' %}" class="btn-feelio-primary btn">
+      <i class="fa-solid fa-plus me-1"></i>Check In Today
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <!-- Chart -->
+    <div class="col-12">
+      <div class="feelio-card">
+        <div class="card-header">📈 30-Day Mood Trend</div>
+        <div class="p-3"><canvas id="moodChart" height="100"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Recent entries -->
+    <div class="col-12">
+      <div class="feelio-card">
+        <div class="card-header">📅 Recent Check-Ins</div>
+        <div class="p-3">
+          {% if entries %}
+          <div class="table-responsive">
+            <table class="table align-middle" style="font-size:0.92rem;">
+              <thead><tr>
+                <th>Date</th><th>Mood</th><th>Feeling</th><th>Symptoms</th>
+              </tr></thead>
+              <tbody>
+              {% for entry in entries %}
+              <tr>
+                <td><strong>{{ entry.date|date:"M j" }}</strong></td>
+                <td style="font-size:1.4rem;">{{ entry.mood_emoji }} <small class="text-muted">{{ entry.mood_label }}</small></td>
+                <td>{{ entry.one_word_feeling|default:"—" }}</td>
+                <td>
+                  {% for tag in entry.symptoms.all %}
+                  <span class="badge" style="background:var(--bg2);color:var(--text-body);border-radius:50px;font-size:0.75rem;">{{ tag.name }}</span>
+                  {% empty %}—{% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="text-center py-4">
+            <p class="mb-3" style="color:#9C6B8A;">No check-ins yet. Start tracking today!</p>
+            <a href="{% url 'tracker:checkin' %}" class="btn-feelio-primary btn">Check In Now</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Journal link -->
+    <div class="col-12">
+      <div class="feelio-card-pink p-4 d-flex align-items-center gap-3">
+        <i class="fa-solid fa-book-open fa-2x" style="color:var(--primary);"></i>
+        <div>
+          <h5 class="mb-1">Private Journal</h5>
+          <p class="mb-2" style="font-size:0.9rem;">Write freely — your journal is encrypted and only visible to you.</p>
+          <a href="{% url 'tracker:journal' %}" class="btn-feelio-outline btn btn-feelio-sm me-2">View Journal</a>
+          <a href="{% url 'tracker:journal_new' %}" class="btn-feelio-primary btn btn-feelio-sm">New Entry</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const labels = {{ chart_labels|safe }};
+const data   = {{ chart_data|safe }};
+new Chart(document.getElementById('moodChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [{
+      label: 'Mood Score',
+      data,
+      borderColor: '#C2185B',
+      backgroundColor: 'rgba(194,24,91,0.10)',
+      borderWidth: 2.5, fill: true, tension: 0.4,
+      pointBackgroundColor: '#C2185B', pointRadius: 4, spanGaps: true,
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { min: 1, max: 5, ticks: { stepSize: 1, callback: v => ['','😶','😰','😢','🙂','😊'][v]||v }, grid: { color: '#FCE4EC' }},
+      x: { ticks: { maxTicksLimit: 10 }, grid: { display: false }}
+    },
+    plugins: { legend: { display: false }}
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Your Screening Result — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:600px;">
+  <div class="text-center mb-4">
+    <i class="fa-solid fa-clipboard-check fa-2x mb-2" style="color:var(--primary);"></i>
+    <h1 class="section-heading mx-auto d-inline-block">Your Result</h1>
+    <p class="mt-2" style="color:#9C6B8A;font-size:0.9rem;">Completed {{ result.completed_at|date:"F j, Y · g:i A" }}</p>
+  </div>
+
+  <!-- Score display -->
+  <div class="feelio-card p-4 mb-4 text-center">
+    <p class="mb-1" style="font-size:0.9rem;color:#9C6B8A;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Your Score</p>
+    <div style="font-size:4rem;font-weight:800;color:var(--primary);line-height:1;">{{ result.score }}</div>
+    <p class="mb-0" style="font-size:1rem;color:#9C6B8A;">out of 30</p>
+  </div>
+
+  <!-- Tier guidance -->
+  {% if result.tier == 'doing_well' %}
+  <div class="tier-doing-well rounded-feelio p-4 mb-4">
+    <h3 class="mb-2">😊 You're Doing Well</h3>
+    <p class="mb-3">Your score suggests you are managing well right now. That's wonderful. Keep checking in with yourself daily.</p>
+    <ul class="mb-0">
+      <li>Continue your daily mood check-ins</li>
+      <li>Explore the community for peer connection</li>
+      <li>Re-screen in 4 weeks to track your progress</li>
+    </ul>
+  </div>
+  {% elif result.tier == 'needs_attention' %}
+  <div class="tier-needs-attention rounded-feelio p-4 mb-4">
+    <h3 class="mb-2">🌼 It's Okay to Reach Out</h3>
+    <p class="mb-3">Your score suggests you may be experiencing some signs of postpartum depression. You are not alone, and support is available.</p>
+    <ul class="mb-0">
+      <li><strong>Talk to your Public Health Midwife or doctor</strong> about how you're feeling</li>
+      <li>Browse the <a href="{% url 'resources:home' %}" style="color:var(--primary);">resource library</a> for information and support</li>
+      <li>Connect with other mothers in the <a href="{% url 'community:forum' %}" style="color:var(--primary);">community</a></li>
+    </ul>
+  </div>
+  {% else %}
+  <div class="crisis-banner mb-4">
+    <i class="fa-solid fa-heart-pulse fa-2x" style="color:var(--primary);flex-shrink:0;"></i>
+    <div>
+      <h3 class="mb-2">💗 Please Seek Support Now</h3>
+      <p class="mb-3">Your score indicates significant symptoms of postpartum depression. This is not your fault — and help is here for you.</p>
+      <a href="tel:1926" class="btn-feelio-primary btn mb-2 me-2">
+        <i class="fa-solid fa-phone me-2"></i>Call NIMH: 1926 (Free, 24/7)
+      </a>
+      <a href="{% url 'resources:helplines' %}" class="btn-feelio-outline btn mb-2">More Helplines</a>
+      <a href="{% url 'community:msgs' %}" class="btn-feelio-outline btn mb-2">Find a Support Group</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="d-flex gap-3 flex-wrap">
+    <a href="{% url 'screening:history' %}" class="btn-feelio-outline btn">View History</a>
+    <a href="{% url 'tracker:checkin' %}" class="btn-feelio-primary btn">
+      <i class="fa-solid fa-house me-1"></i>Back to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

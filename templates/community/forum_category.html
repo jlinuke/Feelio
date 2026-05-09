@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}{{ category.name }} — Feelio Community{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <div>
+      <a href="{% url 'community:forum' %}" style="color:var(--primary);font-size:0.9rem;">← Back to Community</a>
+      <h1 class="section-heading mt-1 mb-0">{{ category.name }}</h1>
+      {% if category.description %}<p style="color:#9C6B8A;font-size:0.9rem;" class="mb-0">{{ category.description }}</p>{% endif %}
+    </div>
+    <a href="{% url 'community:new_thread_category' category_slug=category.slug %}" class="btn-feelio-primary btn btn-feelio-sm">
+      <i class="fa-solid fa-plus me-1"></i>New Post
+    </a>
+  </div>
+
+  {% for thread in page %}
+  <a href="{% url 'community:thread' pk=thread.pk %}" class="thread-card">
+    <div class="d-flex justify-content-between gap-2">
+      <div>
+        {% if thread.is_pinned %}<i class="fa-solid fa-thumbtack me-1" style="color:var(--primary);font-size:0.8rem;"></i>{% endif %}
+        <span class="thread-title">{{ thread.title }}</span>
+        <div class="thread-meta mt-1">
+          <i class="fa-solid fa-user-circle me-1"></i>{{ thread.author_display }}
+          &nbsp;·&nbsp; {{ thread.updated_at|timesince }} ago
+        </div>
+      </div>
+      <div style="flex-shrink:0;color:#9C6B8A;font-size:0.85rem;">
+        <i class="fa-solid fa-comments me-1"></i>{{ thread.reply_count }}
+      </div>
+    </div>
+  </a>
+  {% empty %}
+  <div class="text-center py-5">
+    <p style="color:#9C6B8A;">No posts here yet. Be the first!</p>
+    <a href="{% url 'community:new_thread_category' category_slug=category.slug %}" class="btn-feelio-primary btn">Start a Post</a>
+  </div>
+  {% endfor %}
+
+  {% if page.has_other_pages %}
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center">
+      {% if page.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}" style="color:var(--primary);">‹</a></li>{% endif %}
+      <li class="page-item disabled"><span class="page-link">Page {{ page.number }} of {{ page.paginator.num_pages }}</span></li>
+      {% if page.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}" style="color:var(--primary);">›</a></li>{% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ article.title }} — Feelio{% endblock %}
+{% block meta_description %}{{ article.summary }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb" style="font-size:0.85rem;">
+          <li class="breadcrumb-item"><a href="{% url 'resources:home' %}" style="color:var(--primary);">Resources</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'resources:articles' %}" style="color:var(--primary);">Articles</a></li>
+          <li class="breadcrumb-item active">{{ article.title|truncatewords:5 }}</li>
+        </ol>
+      </nav>
+
+      <div class="feelio-card p-4 p-md-5">
+        <span class="badge mb-3" style="background:var(--bg2);color:var(--text-body);border-radius:50px;">{{ article.get_category_display }}</span>
+        <h1 style="font-size:1.7rem;" class="mb-2">{{ article.title }}</h1>
+        <p style="color:#9C6B8A;font-size:0.85rem;" class="mb-4">{{ article.created_at|date:"F j, Y" }}</p>
+        <div style="line-height:1.8;font-size:1rem;">
+          {{ article.content|linebreaks }}
+        </div>
+      </div>
+
+      {% if related %}
+      <h5 class="fw-700 mt-5 mb-3">Related Articles</h5>
+      <div class="row g-3">
+        {% for a in related %}
+        <div class="col-md-4">
+          <a href="{% url 'resources:article_detail' slug=a.slug %}" class="feelio-card d-block text-decoration-none p-3">
+            <div class="fw-600" style="font-size:0.9rem;">{{ a.title }}</div>
+            <div style="font-size:0.78rem;color:#9C6B8A;">{{ a.summary|truncatewords:10 }}</div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

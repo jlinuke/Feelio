@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}EPDS Screening — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:640px;">
+  <div class="text-center mb-5">
+    <i class="fa-solid fa-clipboard-check fa-3x mb-3" style="color:var(--primary);"></i>
+    <h1 class="section-heading mx-auto d-inline-block">Edinburgh Postnatal Depression Scale</h1>
+    <p class="mt-3" style="color:var(--text-body);font-size:1rem;line-height:1.7;max-width:540px;margin:0.75rem auto 0;">
+      This is <strong>not a diagnosis</strong>. It's a gentle check-in to help us understand how you're feeling.
+      There are no right or wrong answers — just answer honestly.
+      It takes about 3 minutes.
+    </p>
+  </div>
+
+  {% if last_result %}
+  <div class="feelio-card mb-4 p-4">
+    <h5 class="mb-2">Your last screening</h5>
+    {% if last_result.tier == 'doing_well' %}<div class="tier-doing-well rounded-feelio p-3">
+    {% elif last_result.tier == 'needs_attention' %}<div class="tier-needs-attention rounded-feelio p-3">
+    {% else %}<div class="tier-seek-support rounded-feelio p-3">
+    {% endif %}
+      <p class="mb-0 fw-600">Score: {{ last_result.score }}/30 — {{ last_result.get_tier_display }}</p>
+      <p class="mb-0" style="font-size:0.82rem;color:#9C6B8A;">{{ last_result.completed_at|date:"F j, Y" }}</p>
+    </div>
+    <a href="{% url 'screening:history' %}" class="btn-feelio-outline btn btn-feelio-sm mt-3">View History</a>
+  </div>
+  {% endif %}
+
+  <div class="d-flex flex-column align-items-center gap-3">
+    <a href="{% url 'screening:take' %}" class="btn-feelio-primary btn w-100 py-3" style="font-size:1.1rem;">
+      <i class="fa-solid fa-play me-2"></i>Start the Screening
+    </a>
+    <p class="mb-0" style="font-size:0.82rem;color:#9C6B8A;">
+      <i class="fa-solid fa-shield-heart me-1"></i>Your results are private and stored securely.
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Dashboard — Feelio{% endblock %}
+
+{% block content %}
+<div class="container py-3 py-md-4">
+
+  <!-- ── Greeting ──────────────────────────────────── -->
+  <div class="d-flex align-items-start align-items-sm-center justify-content-between flex-wrap gap-2 mb-3 dashboard-greeting">
+    <div>
+      <h1 class="mb-0" style="font-size:clamp(1.2rem,5vw,1.6rem);">Hi, {{ user.community_name }} 🌸</h1>
+      <p class="text-muted mb-0" style="font-size:0.82rem;">{{ today|date:"l, F j, Y" }}</p>
+    </div>
+    {% if streak.current_streak > 0 %}
+    <div class="streak-badge pulse-pink flex-shrink-0">
+      <i class="fa-solid fa-fire"></i> {{ streak.current_streak }}-day streak!
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── Crisis Banner ─────────────────────────────── -->
+  {% if show_crisis_banner %}
+  <div class="crisis-banner mb-3 fade-in-up">
+    <i class="fa-solid fa-heart-pulse fa-lg flex-shrink-0" style="color:var(--primary);"></i>
+    <div>
+      <strong>We're here with you.</strong>
+      We noticed you've been going through a hard time. You are not alone.
+      <br><a href="tel:1926">📞 Call 1926</a> &nbsp;·&nbsp; <a href="{% url 'resources:helplines' %}">More support →</a>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── Daily Affirmation ─────────────────────────── -->
+  <div class="affirmation-card mb-3 fade-in-up">
+    <p class="mb-0"><i class="fa-solid fa-quote-left me-2 opacity-75"></i>{{ affirmation }}<i class="fa-solid fa-quote-right ms-2 opacity-75"></i></p>
+  </div>
+
+  <!-- ── Check-In Card ─────────────────────────────── -->
+  <div class="feelio-card mb-3 fade-in-up">
+    <div class="card-header d-flex align-items-center gap-2">
+      <i class="fa-solid fa-face-smile" style="color:var(--primary);"></i>
+      <span>Daily Check-In</span>
+    </div>
+    <div class="p-3 p-md-4">
+      {% if checked_in_today %}
+        <div class="text-center py-2">
+          <div style="font-size:3rem; line-height:1;">{{ today_entry.mood_emoji }}</div>
+          <p class="fw-700 mt-2 mb-1">You checked in today — <em>{{ today_entry.mood_label }}</em></p>
+          {% if today_entry.one_word_feeling %}
+          <p class="mb-2" style="color:#9C6B8A;">"{{ today_entry.one_word_feeling }}"</p>
+          {% endif %}
+          <a href="{% url 'tracker:overview' %}" class="btn-feelio-outline btn btn-feelio-sm">View Mood History</a>
+        </div>
+      {% else %}
+        <p class="mb-3">How are you feeling right now? <span style="color:#9C6B8A;font-size:0.85rem;">(30 seconds)</span></p>
+        <a href="{% url 'tracker:checkin' %}" class="btn-feelio-primary btn w-100">
+          <i class="fa-solid fa-heart me-2"></i>Check In Now
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- ── Weekly Mood Chart ─────────────────────────── -->
+    <div class="col-12">
+      <div class="feelio-card">
+        <div class="card-header">📊 This Week's Mood</div>
+        <div class="p-3"><canvas id="weeklyMoodChart" height="90"></canvas></div>
+      </div>
+    </div>
+
+
+    <!-- ── Community Highlight ───────────────────────── -->
+    {% if community_highlight %}
+    <div class="col-12">
+      <div class="feelio-card">
+        <div class="card-header">💬 Community</div>
+        <div class="p-3 p-md-4">
+          <a href="{% url 'community:thread' pk=community_highlight.pk %}" class="thread-card">
+            <div class="thread-title">{{ community_highlight.title }}</div>
+            <div class="thread-meta mt-1">
+              <i class="fa-solid fa-user-circle me-1"></i>{{ community_highlight.author_display }}
+              &nbsp;·&nbsp; {{ community_highlight.updated_at|timesince }} ago
+              &nbsp;·&nbsp; <i class="fa-solid fa-comments me-1"></i>{{ community_highlight.reply_count }} replies
+            </div>
+          </a>
+          <a href="{% url 'community:forum' %}" class="btn-feelio-outline btn btn-feelio-sm mt-2">
+            <i class="fa-solid fa-users me-1"></i>Visit Community
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── Quick Actions ──────────────────────────────── -->
+    <div class="col-12">
+      <div class="row g-2">
+        <div class="col-6 col-md-3">
+          <a href="{% url 'tracker:journal_new' %}" class="feelio-card d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none text-center" style="min-height:90px;">
+            <i class="fa-solid fa-book-open mb-2" style="color:var(--primary);font-size:1.5rem;"></i>
+            <span class="fw-700" style="font-size:0.82rem;color:var(--text-primary);">Write in Journal</span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3">
+          <a href="{% url 'resources:helplines' %}" class="feelio-card d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none text-center" style="min-height:90px;">
+            <i class="fa-solid fa-phone mb-2" style="color:var(--primary);font-size:1.5rem;"></i>
+            <span class="fw-700" style="font-size:0.82rem;color:var(--text-primary);">Helplines</span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3">
+          <a href="{% url 'community:msgs' %}" class="feelio-card d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none text-center" style="min-height:90px;">
+            <i class="fa-solid fa-people-group mb-2" style="color:var(--primary);font-size:1.5rem;"></i>
+            <span class="fw-700" style="font-size:0.82rem;color:var(--text-primary);">Support Groups</span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3">
+          <a href="{% url 'resources:articles' %}" class="feelio-card d-flex flex-column align-items-center justify-content-center p-3 text-decoration-none text-center" style="min-height:90px;">
+            <i class="fa-solid fa-book-heart mb-2" style="color:var(--primary);font-size:1.5rem;"></i>
+            <span class="fw-700" style="font-size:0.82rem;color:var(--text-primary);">Read Articles</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const labels = {{ week_labels|safe }};
+const scores = {{ week_scores|safe }};
+const ctx = document.getElementById('weeklyMoodChart');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Mood',
+        data: scores,
+        borderColor: '#C2185B',
+        backgroundColor: 'rgba(194,24,91,0.10)',
+        borderWidth: 2.5,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#C2185B',
+        pointRadius: 4,
+        spanGaps: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        y: {
+          min: 1, max: 5,
+          ticks: { stepSize: 1, callback: v => ['','😶','😰','😢','🙂','😊'][v] || v, font: { size: 11 } },
+          grid: { color: '#FCE4EC' }
+        },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+</script>
+{% endblock %}

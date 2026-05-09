@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Join Feelio — Free & Private{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width:480px;">
+  <div class="feelio-card p-4 p-md-5">
+    <div class="text-center mb-4">
+      <i class="fa-solid fa-heart-pulse fa-2x mb-2" style="color:var(--primary);"></i>
+      <h1 style="font-size:1.7rem;">Create your Feelio account</h1>
+      <p style="color:#9C6B8A;font-size:0.9rem;">Free, private, and judgment-free. 💗</p>
+    </div>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+        {% for error in field.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn-feelio-primary btn w-100 mt-2">
+        <i class="fa-solid fa-heart me-2"></i>Create Account
+      </button>
+    </form>
+    <hr class="my-4">
+    <p class="text-center mb-0" style="font-size:0.9rem;">
+      Already have an account? <a href="{% url 'accounts:login' %}" style="color:var(--primary);font-weight:700;">Sign in</a>
+    </p>
+    <p class="text-center mt-2" style="font-size:0.78rem;color:#9C6B8A;">
+      <i class="fa-solid fa-shield-heart me-1"></i>Your data is encrypted and never shared without your consent.
+    </p>
+  </div>
+</div>
+{% endblock %}

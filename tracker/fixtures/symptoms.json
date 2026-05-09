@@ -1,0 +1,10 @@
+[
+  {"model":"tracker.symptomtag","pk":1,"fields":{"name":"Sleep Issues","slug":"sleep-issues"}},
+  {"model":"tracker.symptomtag","pk":2,"fields":{"name":"Low Energy","slug":"low-energy"}},
+  {"model":"tracker.symptomtag","pk":3,"fields":{"name":"Anxiety","slug":"anxiety"}},
+  {"model":"tracker.symptomtag","pk":4,"fields":{"name":"Bonding Difficulty","slug":"bonding-difficulty"}},
+  {"model":"tracker.symptomtag","pk":5,"fields":{"name":"Irritability","slug":"irritability"}},
+  {"model":"tracker.symptomtag","pk":6,"fields":{"name":"Appetite Change","slug":"appetite-change"}},
+  {"model":"tracker.symptomtag","pk":7,"fields":{"name":"Difficulty Concentrating","slug":"difficulty-concentrating"}},
+  {"model":"tracker.symptomtag","pk":8,"fields":{"name":"Feeling Hopeless","slug":"feeling-hopeless"}}
+]

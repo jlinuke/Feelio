@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Mothers' Support Groups — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="section-heading mb-4">Mothers' Support Groups</h1>
+  <form method="get" class="d-flex gap-2 mb-4" style="max-width:400px;">
+    <select name="province" class="form-select">
+      <option value="">All Provinces</option>
+      {% for p in provinces %}<option value="{{ p }}" {% if p == selected_province %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="btn-feelio-primary btn px-4">Filter</button>
+  </form>
+
+  <div class="row g-3">
+    {% for loc in locations %}
+    <div class="col-md-6 col-lg-4">
+      <div class="feelio-card h-100 p-4">
+        <h5 class="mb-1">{{ loc.name }}</h5>
+        <p class="mb-2" style="font-size:0.82rem;color:#9C6B8A;">
+          <i class="fa-solid fa-location-dot me-1"></i>{{ loc.district }}, {{ loc.province }}
+        </p>
+        {% if loc.meeting_day %}
+        <p class="mb-1" style="font-size:0.88rem;"><i class="fa-solid fa-calendar me-2" style="color:var(--primary);"></i>{{ loc.meeting_day }} at {{ loc.meeting_time }}</p>
+        {% endif %}
+        {% if loc.phm_contact_name %}
+        <p class="mb-1" style="font-size:0.88rem;"><i class="fa-solid fa-user-nurse me-2" style="color:var(--primary);"></i>{{ loc.phm_contact_name }}</p>
+        {% endif %}
+        {% if loc.phm_contact_phone %}
+        <a href="tel:{{ loc.phm_contact_phone }}" class="btn-feelio-primary btn btn-feelio-sm mt-2">
+          <i class="fa-solid fa-phone me-1"></i>{{ loc.phm_contact_phone }}
+        </a>
+        {% endif %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <p style="color:#9C6B8A;">No support groups found for this filter.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

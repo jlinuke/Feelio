@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ action }} Journal Entry — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:680px;">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <a href="{% url 'tracker:journal' %}" class="btn-feelio-outline btn btn-feelio-sm">
+      <i class="fa-solid fa-arrow-left me-1"></i>Back
+    </a>
+    <h1 class="section-heading mb-0">{{ action }} Entry</h1>
+  </div>
+
+  {% if prompt and action == 'New' %}
+  <div class="affirmation-card mb-4" style="padding:1rem 1.25rem;background:linear-gradient(135deg,var(--bg1),var(--bg2));">
+    <p class="mb-0" style="color:var(--text-primary);font-style:italic;font-size:0.95rem;">
+      <i class="fa-solid fa-lightbulb me-2" style="color:var(--primary);"></i>Today's prompt: "<strong>{{ prompt }}</strong>"
+    </p>
+  </div>
+  {% endif %}
+
+  <div class="feelio-card p-4">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+      {% if field.name != 'prompt_used' %}
+      <div class="mb-3">
+        {% if field.name != 'is_pinned' %}
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {% endif %}
+        {{ field }}
+        {% for error in field.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+      </div>
+      {% else %}
+      {{ field }}
+      {% endif %}
+      {% endfor %}
+      <div class="d-flex gap-3 mt-3">
+        <button type="submit" class="btn-feelio-primary btn flex-grow-1">
+          <i class="fa-solid fa-floppy-disk me-2"></i>Save Entry
+        </button>
+        <a href="{% url 'tracker:journal' %}" class="btn-feelio-outline btn">Cancel</a>
+      </div>
+    </form>
+  </div>
+  <p class="text-center mt-3" style="font-size:0.82rem;color:#9C6B8A;">
+    <i class="fa-solid fa-lock me-1"></i>All journal entries are private and only visible to you.
+  </p>
+</div>
+{% endblock %}

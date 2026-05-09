@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Mood Check-In — Feelio{% endblock %}
+{% block content %}
+<div class="container py-3 py-md-4" style="max-width:580px;">
+  <h1 class="section-heading mb-1">How are you feeling?</h1>
+  <p class="mb-3" style="color:#9C6B8A;font-size:0.88rem;">{{ today|date:"l, F j" }} · Takes about 30 seconds 💗</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <!-- Mood Selector -->
+    <div class="feelio-card p-3 p-md-4 mb-3">
+      <h5 class="fw-700 mb-3" style="font-size:1rem;">Choose your mood</h5>
+      <div class="mood-options">
+        {% for value, label in form.mood_score.field.choices %}
+        {% with emoji=label|slice:":2" name=label|slice:"3:" %}
+        <div>
+          <input type="radio" name="mood_score" id="mood_{{ value }}" value="{{ value }}" class="mood-option" required>
+          <label for="mood_{{ value }}" class="mood-label">
+            <span class="emoji">{{ emoji }}</span>
+            <span class="mood-name">{{ name }}</span>
+          </label>
+        </div>
+        {% endwith %}
+        {% endfor %}
+      </div>
+      {% if form.mood_score.errors %}
+      <div class="text-danger small mt-2">Please choose a mood.</div>
+      {% endif %}
+    </div>
+
+    <!-- One-word feeling -->
+    <div class="feelio-card p-3 p-md-4 mb-3">
+      <label for="{{ form.one_word_feeling.id_for_label }}" class="form-label">
+        One word for how you feel?
+        <span style="color:#9C6B8A;font-weight:400;font-size:0.85rem;"> (optional)</span>
+      </label>
+      {{ form.one_word_feeling }}
+    </div>
+
+    <!-- Symptom checkboxes -->
+    <div class="feelio-card p-3 p-md-4 mb-3">
+      <h5 class="fw-700 mb-2" style="font-size:0.95rem;">
+        Anything you noticed today?
+        <span style="color:#9C6B8A;font-weight:400;font-size:0.85rem;"> (optional)</span>
+      </h5>
+      <div class="row g-1">
+        {% for choice in form.symptoms %}
+        <div class="col-6">
+          <div class="form-check">
+            {{ choice.tag }}
+            <label class="form-check-label" for="{{ choice.id_for_label }}" style="font-size:0.85rem;">{{ choice.choice_label }}</label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="feelio-card p-3 p-md-4 mb-3">
+      <label class="form-label">Anything else? <span style="color:#9C6B8A;font-weight:400;">(optional)</span></label>
+      {{ form.notes }}
+    </div>
+
+    <button type="submit" class="btn-feelio-primary btn w-100">
+      <i class="fa-solid fa-heart me-2"></i>Save My Check-In
+    </button>
+  </form>
+</div>
+{% endblock %}

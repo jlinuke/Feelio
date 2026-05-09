@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Articles — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="section-heading mb-4">Resource Articles</h1>
+
+  <!-- Category filter -->
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'resources:articles' %}" class="btn-feelio-sm {% if not selected_category %}btn-feelio-primary btn{% else %}btn-feelio-outline btn{% endif %}">All</a>
+    {% for slug, label in categories %}
+    <a href="?category={{ slug }}" class="{% if selected_category == slug %}btn-feelio-primary btn btn-feelio-sm{% else %}btn-feelio-outline btn btn-feelio-sm{% endif %}">{{ label }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="row g-4">
+    {% for article in articles %}
+    <div class="col-md-6 col-lg-4">
+      <a href="{% url 'resources:article_detail' slug=article.slug %}" class="feelio-card d-block text-decoration-none h-100 p-4">
+        <span class="badge mb-2" style="background:var(--bg2);color:var(--text-body);border-radius:50px;font-size:0.75rem;">{{ article.get_category_display }}</span>
+        <h5 class="mb-2">{{ article.title }}</h5>
+        <p class="mb-0" style="font-size:0.88rem;color:#9C6B8A;">{{ article.summary|truncatewords:20 }}</p>
+      </a>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+      <p style="color:#9C6B8A;">No articles found. Check back soon.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

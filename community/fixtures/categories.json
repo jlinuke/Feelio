@@ -1,0 +1,7 @@
+[
+  {"model":"community.forumcategory","pk":1,"fields":{"name":"First-time Mothers","slug":"first-time-mothers","description":"A welcoming space for those navigating motherhood for the first time.","icon":"fa-baby","order":1}},
+  {"model":"community.forumcategory","pk":2,"fields":{"name":"Feeling Overwhelmed","slug":"feeling-overwhelmed","description":"Share and receive support when things feel too heavy.","icon":"fa-cloud-rain","order":2}},
+  {"model":"community.forumcategory","pk":3,"fields":{"name":"Breastfeeding Support","slug":"breastfeeding-support","description":"Questions, tips, and solidarity around breastfeeding.","icon":"fa-heart","order":3}},
+  {"model":"community.forumcategory","pk":4,"fields":{"name":"Partner Support","slug":"partner-support","description":"For partners who want to understand and help.","icon":"fa-people-pulling","order":4}},
+  {"model":"community.forumcategory","pk":5,"fields":{"name":"Recovery Stories","slug":"recovery-stories","description":"Uplifting stories from mothers who have walked this path.","icon":"fa-sun","order":5}}
+]

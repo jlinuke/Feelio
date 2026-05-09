@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:700px;">
+  <h1 class="section-heading mb-4">My Profile & Settings</h1>
+
+  <!-- User Settings -->
+  <div class="feelio-card mb-4">
+    <div class="card-header"><i class="fa-solid fa-user me-2" style="color:var(--primary);"></i>Account Settings</div>
+    <div class="p-4">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="action" value="user_settings">
+        {% for field in user_form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-feelio-primary btn">Save Settings</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="feelio-card mb-4">
+    <div class="card-header"><i class="fa-solid fa-baby me-2" style="color:var(--primary);"></i>Postpartum Profile</div>
+    <div class="p-4">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="action" value="profile_settings">
+        {% for field in profile_form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-feelio-primary btn">Save Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Danger Zone -->
+  <div class="feelio-card border-danger" style="border:2px solid #ffcdd2!important;">
+    <div class="card-header" style="background:#FFF5F7;"><i class="fa-solid fa-triangle-exclamation me-2 text-danger"></i>Danger Zone</div>
+    <div class="p-4">
+      <p class="mb-3">Permanently delete your account and all associated data. <strong>This cannot be undone.</strong></p>
+      <form method="post" onsubmit="return confirm('Are you absolutely sure? All your data will be permanently deleted.');">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="delete_account">
+        <button type="submit" class="btn btn-outline-danger">
+          <i class="fa-solid fa-trash me-2"></i>Delete My Account & Data
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

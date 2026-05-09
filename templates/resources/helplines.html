@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Helplines — Feelio{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:720px;">
+  <h1 class="section-heading mb-4">Helplines & Support</h1>
+  <div class="crisis-banner mb-5">
+    <i class="fa-solid fa-heart-pulse fa-2x" style="color:var(--primary);flex-shrink:0;"></i>
+    <div>
+      <strong>If you are in crisis right now, please call 1926 immediately.</strong><br>
+      <a href="tel:1926" style="font-size:1.4rem;font-weight:800;color:var(--primary);">📞 1926</a>
+      — Free · 24/7 · Sinhala · Tamil · English
+    </div>
+  </div>
+  <div class="row g-4">
+    {% for h in helplines %}
+    <div class="col-md-6">
+      <div class="helpline-card">
+        {% if h.is_featured %}<span class="badge mb-2" style="background:var(--primary);color:#fff;border-radius:50px;font-size:0.75rem;">Featured</span>{% endif %}
+        <p class="fw-700 mb-1">{{ h.name }}</p>
+        <div class="helpline-number">{{ h.number }}</div>
+        {% if h.description %}<p style="font-size:0.82rem;color:#9C6B8A;" class="mb-2">{{ h.description }}</p>{% endif %}
+        <p style="font-size:0.8rem;color:#9C6B8A;" class="mb-3">{{ h.available_hours }} · {{ h.languages }}</p>
+        <a href="tel:{{ h.number }}" class="btn-call"><i class="fa-solid fa-phone me-2"></i>Call Now</a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-4">
+      <p style="color:#9C6B8A;">Helpline data will appear here once configured by the team.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

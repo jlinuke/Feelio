@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}EPDS Questionnaire — Feelio{% endblock %}
+{% block content %}
+<div class="container py-3 py-md-4" style="max-width:660px;">
+  <h1 class="section-heading mb-1" style="font-size:clamp(1.1rem,4vw,1.5rem);">Your Screening</h1>
+  <p class="mb-3" style="color:#9C6B8A;font-size:0.85rem;">
+    Answer all {{ questions|length }} questions about how you've felt <strong>in the past 7 days</strong>.
+  </p>
+
+  <!-- Progress bar -->
+  <div class="mb-3">
+    <div class="d-flex justify-content-between mb-1" style="font-size:0.78rem;color:#9C6B8A;">
+      <span id="progressLabel">0 / {{ questions|length }} answered</span>
+      <span>~3 minutes</span>
+    </div>
+    <div class="progress" style="height:8px;border-radius:8px;background:var(--bg2);">
+      <div class="progress-bar" id="epdsProgress" style="width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary));border-radius:8px;transition:width 0.4s ease;"></div>
+    </div>
+  </div>
+
+  <form method="post" novalidate id="epdsForm">
+    {% csrf_token %}
+    {% for question in questions %}
+    <div class="epds-question-card mb-3" data-q="{{ forloop.counter }}">
+      <p class="fw-700 mb-1" style="color:#9C6B8A;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">
+        Question {{ forloop.counter }} of {{ questions|length }}
+      </p>
+      <h5 class="mb-3" style="font-size:clamp(0.95rem,3vw,1.1rem);">{{ question.text_en }}</h5>
+      {% for option in question.options.all %}
+      <div class="epds-option" onclick="selectOpt(this)">
+        <input type="radio" name="q_{{ question.id }}" id="q{{ question.id }}_{{ option.id }}" value="{{ option.id }}" required>
+        <label for="q{{ question.id }}_{{ option.id }}">{{ option.text_en }}</label>
+      </div>
+      {% endfor %}
+    </div>
+    {% empty %}
+    <div class="text-center py-4">
+      <p>Screening questions are being set up. Check back soon.</p>
+      <a href="{% url 'screening:start' %}" class="btn-feelio-outline btn">Go Back</a>
+    </div>
+    {% endfor %}
+
+    {% if questions %}
+    <button type="submit" class="btn-feelio-primary btn w-100 py-3 mt-2" id="submitBtn" style="font-size:1.05rem;">
+      <i class="fa-solid fa-check-circle me-2"></i>Submit My Answers
+    </button>
+    <p class="text-center mt-2" style="font-size:0.78rem;color:#9C6B8A;">
+      <i class="fa-solid fa-lock me-1"></i>Results are private and stored securely.
+    </p>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const total = {{ questions|length }};
+function selectOpt(el) {
+  el.querySelector('input[type="radio"]').checked = true;
+  // Highlight selected
+  const name = el.querySelector('input').name;
+  document.querySelectorAll(`.epds-option input[name="${name}"]`).forEach(i => {
+    i.closest('.epds-option').style.borderColor = '';
+    i.closest('.epds-option').style.background = '';
+  });
+  el.style.borderColor = 'var(--primary)';
+  el.style.background = 'var(--bg1)';
+  updateProgress();
+}
+function updateProgress() {
+  const answered = document.querySelectorAll('#epdsForm input[type="radio"]:checked').length;
+  const pct = answered / total * 100;
+  document.getElementById('epdsProgress').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${answered} / ${total} answered`;
+}
+document.querySelectorAll('.epds-option input').forEach(inp => inp.addEventListener('change', updateProgress));
+</script>
+{% endblock %}

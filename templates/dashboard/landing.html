@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Feelio — You Are Not Alone{% endblock %}
+{% block meta_description %}Feelio is a safe, warm space for mothers to track their emotional wellbeing, take the EPDS screening, and connect with supportive community.{% endblock %}
+
+{% block content %}
+<!-- ── Hero ────────────────────────────────────────── -->
+<section class="hero-section">
+  <div class="container position-relative">
+    <div class="row align-items-center gy-4">
+
+      <div class="col-lg-6 fade-in-up">
+        <p class="mb-2" style="color:rgba(255,255,255,0.8);font-weight:700;font-size:0.8rem;letter-spacing:1.5px;text-transform:uppercase;">For Mothers · By Mothers</p>
+        <h1 class="hero-title mb-3">You don't have to fight the darkness alone.</h1>
+        <p class="hero-subtitle mb-4">Feelio is your safe, judgment-free companion for postpartum emotional wellbeing — track your mood, take the EPDS screening, and find support from mothers who truly understand.</p>
+        <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3">
+          <a href="{% url 'accounts:register' %}" class="btn-feelio-primary btn" style="background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.6);box-shadow:none;backdrop-filter:blur(8px);">
+            <i class="fa-solid fa-heart me-2"></i>Join Free — It's Private
+          </a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-link text-white fw-700 p-2 align-self-center" style="font-size:0.95rem;">
+            Sign In <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+        <p class="mt-3" style="color:rgba(255,255,255,0.65);font-size:0.82rem;">
+          <i class="fa-solid fa-shield-heart me-1"></i>100% private. Anonymous mode available.
+        </p>
+      </div>
+
+      <div class="col-lg-6 fade-in-up" style="animation-delay:0.15s;">
+        <div class="row g-2">
+          <div class="col-6"><div class="stat-badge"><span class="stat-number">1 in 8</span><span class="stat-label">mothers experience postpartum depression globally</span></div></div>
+          <div class="col-6"><div class="stat-badge"><span class="stat-number">15.5%</span><span class="stat-label">PPD rate in Sri Lanka at 10 days postpartum</span></div></div>
+          <div class="col-6"><div class="stat-badge"><span class="stat-number">75%</span><span class="stat-label">of affected mothers never receive a diagnosis</span></div></div>
+          <div class="col-6"><div class="stat-badge"><span class="stat-number">1926</span><span class="stat-label">NIMH helpline — free, 24/7</span></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Features ─────────────────────────────────────── -->
+<section class="page-section bg-white">
+  <div class="container">
+    <div class="text-center mb-4 mb-md-5">
+      <h2 class="section-heading mx-auto d-inline-block">Everything you need, in one safe place</h2>
+    </div>
+    <div class="row g-3 g-md-4">
+      <div class="col-6 col-md-4 fade-in-up">
+        <div class="feelio-card h-100 p-3 p-md-4 text-center">
+          <div class="mb-2" style="font-size:2rem;">😊</div>
+          <h5 class="fw-700 mb-1" style="font-size:0.95rem;">Daily Mood Check-In</h5>
+          <p class="mb-0" style="font-size:0.82rem;">Log how you feel each day in 30 seconds.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 fade-in-up" style="animation-delay:0.05s;">
+        <div class="feelio-card h-100 p-3 p-md-4 text-center">
+          <div class="mb-2" style="font-size:2rem;">🔥</div>
+          <h5 class="fw-700 mb-1" style="font-size:0.95rem;">Streak Tracking</h5>
+          <p class="mb-0" style="font-size:0.82rem;">Build a daily check-in habit and watch your streak grow.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 fade-in-up" style="animation-delay:0.1s;">
+        <div class="feelio-card h-100 p-3 p-md-4 text-center">
+          <div class="mb-2" style="font-size:2rem;">📓</div>
+          <h5 class="fw-700 mb-1" style="font-size:0.95rem;">Private Journal</h5>
+          <p class="mb-0" style="font-size:0.82rem;">Write freely with guided prompts. Always encrypted.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 fade-in-up" style="animation-delay:0.15s;">
+        <div class="feelio-card h-100 p-3 p-md-4 text-center">
+          <div class="mb-2" style="font-size:2rem;">💬</div>
+          <h5 class="fw-700 mb-1" style="font-size:0.95rem;">Peer Community</h5>
+          <p class="mb-0" style="font-size:0.82rem;">Anonymous forums — mothers who understand.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 fade-in-up" style="animation-delay:0.2s;">
+        <div class="feelio-card h-100 p-3 p-md-4 text-center">
+          <div class="mb-2" style="font-size:2rem;">📚</div>
+          <h5 class="fw-700 mb-1" style="font-size:0.95rem;">Resource Library</h5>
+          <p class="mb-0" style="font-size:0.82rem;">Helplines, articles & PHM locator — 3 languages.</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 fade-in-up" style="animation-delay:0.25s;">
+        <div class="feelio-card h-100 p-3 p-md-4 text-center">
+          <div class="mb-2" style="font-size:2rem;">🔒</div>
+          <h5 class="fw-700 mb-1" style="font-size:0.95rem;">Private & Secure</h5>
+          <p class="mb-0" style="font-size:0.82rem;">Encrypted data. Your secrets stay here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Crisis Strip ──────────────────────────────────── -->
+<section style="background:linear-gradient(135deg,var(--primary),var(--accent));padding:1.5rem 0;">
+  <div class="container text-center">
+    <p class="mb-1" style="color:rgba(255,255,255,0.85);font-size:0.85rem;">Need to talk to someone right now?</p>
+    <h2 style="color:#fff;font-weight:800;font-size:clamp(1.2rem,5vw,1.8rem);">
+      Call the NIMH Helpline: <a href="tel:1926" style="color:#fff;text-decoration:underline;">1926</a>
+    </h2>
+    <p class="mb-0 mt-1" style="color:rgba(255,255,255,0.75);font-size:0.82rem;">Available 24/7 · Sinhala · Tamil · English</p>
+  </div>
+</section>
+
+<!-- ── Quote ─────────────────────────────────────────── -->
+<section class="page-section" style="background:var(--bg1);">
+  <div class="container text-center" style="max-width:680px;">
+    <p style="font-size:clamp(1rem,3.5vw,1.25rem);font-style:italic;color:var(--text-primary);font-weight:600;line-height:1.7;">
+      "Mothers do not fail when they experience depression; society fails when it leaves them to fight the darkness alone."
+    </p>
+    <p class="mt-2" style="color:#9C6B8A;font-size:0.85rem;">— Unspoken Battles Research Report, 2026</p>
+    <a href="{% url 'accounts:register' %}" class="btn-feelio-primary btn mt-3">
+      <i class="fa-solid fa-heart me-2"></i>Join Feelio — It's Free
+    </a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}{{ thread.title }} — Feelio Community{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width:760px;">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb" style="font-size:0.85rem;">
+      <li class="breadcrumb-item"><a href="{% url 'community:forum' %}" style="color:var(--primary);">Community</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'community:category' slug=thread.category.slug %}" style="color:var(--primary);">{{ thread.category.name }}</a></li>
+      <li class="breadcrumb-item active">{{ thread.title|truncatewords:6 }}</li>
+    </ol>
+  </nav>
+
+  <!-- Thread -->
+  <div class="feelio-card mb-4">
+    <div class="p-4">
+      <h1 style="font-size:1.4rem;" class="mb-1">{{ thread.title }}</h1>
+      <p style="font-size:0.82rem;color:#9C6B8A;" class="mb-3">
+        <i class="fa-solid fa-user-circle me-1"></i>{{ thread.author_display }}
+        &nbsp;·&nbsp; {{ thread.created_at|date:"F j, Y" }}
+        &nbsp;·&nbsp; <i class="fa-solid fa-eye me-1"></i>{{ thread.view_count }} views
+      </p>
+      <p class="mb-0" style="white-space:pre-line;">{{ thread.content }}</p>
+    </div>
+  </div>
+
+  <!-- Replies -->
+  {% for post in posts %}
+  <div class="feelio-card mb-3">
+    <div class="p-4">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <div style="font-size:0.82rem;color:#9C6B8A;">
+          <i class="fa-solid fa-user-circle me-1"></i>{{ post.author_display }}
+          &nbsp;·&nbsp; {{ post.created_at|timesince }} ago
+        </div>
+        <a href="{% url 'community:flag' post_pk=post.pk %}" class="text-muted" style="font-size:0.75rem;" title="Flag this post">
+          <i class="fa-solid fa-flag"></i>
+        </a>
+      </div>
+      <p class="mb-3" style="white-space:pre-line;">{{ post.content }}</p>
+      <!-- Reactions -->
+      <div class="d-flex gap-2 flex-wrap">
+        {% for rtype, rlabel in post.reactions.model.REACTION_CHOICES|default:'' %}{% endfor %}
+        <button class="reaction-btn {% if request.user in post.reactions.filter(reaction_type='heart').values('user') %}active{% endif %}"
+          onclick="react('{{ post.pk }}','heart',this)"
+          data-post="{{ post.pk }}" data-type="heart">
+          ❤️ <span class="count">{{ post.reactions.filter.reaction_type }}</span>
+        </button>
+        <button class="reaction-btn" onclick="react('{{ post.pk }}','hug',this)">🤗 Hug</button>
+        <button class="reaction-btn" onclick="react('{{ post.pk }}','metoo',this)">🙋 Me too</button>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-center py-3" style="color:#9C6B8A;">Be the first to reply. 💗</p>
+  {% endfor %}
+
+  <!-- Reply form -->
+  {% if not thread.is_closed %}
+  <div class="feelio-card mt-4">
+    <div class="card-header">💬 Add Your Reply</div>
+    <div class="p-4">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ post_form.content }}
+        {% for error in post_form.content.errors %}
+        <div class="text-danger small mt-1">{{ error }}</div>
+        {% endfor %}
+        <button type="submit" class="btn-feelio-primary btn mt-3">
+          <i class="fa-solid fa-paper-plane me-2"></i>Post Reply
+        </button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert-feelio p-3 mt-4 rounded-feelio text-center">
+    <i class="fa-solid fa-lock me-2"></i>This thread is closed to new replies.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function react(postId, type, btn) {
+  fetch(`/community/post/${postId}/react/`, {
+    method: 'POST',
+    headers: { 'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `reaction_type=${type}`
+  }).then(r => r.json()).then(data => {
+    btn.classList.toggle('active', data.active);
+  });
+}
+</script>
+{% endblock %}
